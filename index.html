@@ -1,75 +1,40 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Directions service</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    <style>
-      html, body{
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
+    <script type="text/javascript" src="scripts/lib/xdate.js"></script>
+    <script type="text/javascript" src="scripts/lib/geodesy.js"></script>
+    <script type="text/javascript" src="scripts/app/directionrouting.js"></script>
+    <script type="text/javascript" src="scripts/app/map.js"></script>
+    <script type="text/javascript" src="scripts/app.js"></script>
+</head>
 
-      #map-canvas {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        float: left;
-      }
-
-      #map-directions {
-        width: 800px;
-        border: 1px solid;
-        height: 20px;
-      }
-    </style>
-    <script type="text/javascript" src="geodesy.js"></script>
-    <script type="text/javascript" src="index.js"></script>
-  </head>
-  <body>
-    <div id="panel">
-      <b>Start: </b>
-      <select id="start" onchange="calcRoute();">
-        <option value="chicago, il">Chicago</option>
-        <option value="st louis, mo">St Louis</option>
-        <option value="joplin, mo">Joplin, MO</option>
-        <option value="oklahoma city, ok">Oklahoma City</option>
-        <option value="amarillo, tx">Amarillo</option>
-        <option value="gallup, nm">Gallup, NM</option>
-        <option value="flagstaff, az">Flagstaff, AZ</option>
-        <option value="winona, az">Winona</option>
-        <option value="kingman, az">Kingman</option>
-        <option value="barstow, ca">Barstow</option>
-        <option value="san bernardino, ca">San Bernardino</option>
-        <option value="los angeles, ca">Los Angeles</option>
-      </select>
-      <b>End: </b>
-      <select id="end" onchange="calcRoute();">
-        <option value="chicago, il">Chicago</option>
-        <option value="st louis, mo">St Louis</option>
-        <option value="joplin, mo">Joplin, MO</option>
-        <option value="oklahoma city, ok">Oklahoma City</option>
-        <option value="amarillo, tx">Amarillo</option>
-        <option value="gallup, nm">Gallup, NM</option>
-        <option value="flagstaff, az">Flagstaff, AZ</option>
-        <option value="winona, az">Winona</option>
-        <option value="kingman, az">Kingman</option>
-        <option value="barstow, ca">Barstow</option>
-        <option value="san bernardino, ca">San Bernardino</option>
-        <option value="los angeles, ca">Los Angeles</option>
-      </select>
-      <p id="map-directions">Directions will go here</p>
-      <p id="map-speed">Speed will go here</p>
-      <p id="map-bearing">Bearing will go here</p>
-      <p id="map-step">Step Number will go here</p>
-      <button id="start" onclick="startJourney();">Start</button>
-      <button id="stop" onclick="stopJourney();">Stop</button>
-      <button id="goto" onClick="gotoPosition();">Goto</button>
+<body>
+    <div id="panel" class="overlay">
+        Mode:
+        <select id="mode" onchange="calcRoute();">
+          <option value="DRIVING">Driving</option>
+          <option value="WALKING">Walking</option>
+          <option value="BICYCLING">Bicycling</option>
+          <option value="TRANSIT">Transit</option>
+        </select>
+        <button id="select" onclick="selectDestination();">Select</button>
+        <button id="recalc" onclick="calcRoute();">Recalc</button>
+        <button id="start" onclick="startJourney();">Start</button>
+        <button id="pause" onclick="pauseJourney();">Stop</button>
+        <button id="goto" onClick="gotoPosition();">Goto</button>
+        <button onClick="changeMarkerIcon()">Test</button>
+        
     </div>
 
     <div id="map-canvas"></div>
-  </body>
+    <div id="eta" class="overlay">ETA: <span id="etatext"></span></div>
+    <div id="time" class="overlay"></div>
+</body>
+
 </html>

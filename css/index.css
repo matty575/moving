@@ -1,0 +1,64 @@
+0/*
+    Document   : index.css
+    Created on : 2014-04-13 01:46 PM
+    Author     : matty575
+    Description:
+    Purpose of the stylesheet follows.
+    To change this template use Tools | Templates.
+*/
+
+root {
+    display: block;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Tahoma;
+}
+
+.overlay {
+    background-color: #FFFFFF;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.14902);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
+}
+
+#panel {
+    bottom: 20px;
+    left: 100px;
+    height: auto;
+    width: 30%;
+    position: absolute;
+    z-index: 99;
+    background-color: white;
+    padding-top: 7.5px;
+    padding-left: 7.5px;
+    padding-bottom: 7.5px;
+}
+
+#map-canvas {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    float: left;
+}
+
+#time {
+    bottom: 20px;
+    right: 10px;
+    height: 20px;
+    position: absolute;
+    z-index: 99;
+}
+
+#eta {
+    bottom: 50px;
+    right: 10px;
+    height: 20px;
+    position: absolute;
+    z-index: 99;
+}
