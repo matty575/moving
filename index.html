@@ -9,6 +9,14 @@
 </head>
 
 <body>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="menu" class="overlay">
+        <a id="home" href="#" title="Home Location"><img src="img/home_32.png"></a>
+        <a id="select" href="#" title="Select Destination"><img src="img/select_32.png"></a>
+        <a id="start" href="#" title="Start"><img src="img/start_32.png"></a>
+        <a id="stop" href="#" title="Stop"><img src="img/stop_32.png"></a>
+        <a id="goto"href="#" title="Goto Location"><img src="img/goto_32.png"></a>
+    </div>
     <div id="panel" class="overlay">
         Mode:
         <select id="mode">
@@ -17,18 +25,10 @@
           <option value="BICYCLING">Bicycling</option>
           <option value="TRANSIT">Transit</option>
         </select>
-        <button id="select">Select</button>
-        <button id="recalc">Recalc</button>
-        <button id="start">Start</button>
-        <button id="stop">Stop</button>
-        <button id="goto">Goto</button>
-        <button onClick="changeMarkerIcon()">Test</button>
-        
     </div>
-
-    <div id="map-canvas"></div>
     <div id="eta" class="overlay">ETA: <span id="etatext"></span></div>
-    <div id="time" class="overlay"></div>
+    <div id="time" class="overlay">TIME: <span id="timetext"></span></div>
+    <div id="map-canvas"></div>
     
     <script data-main="scripts/app/app" src="scripts/lib/require.js"></script>
 </body>

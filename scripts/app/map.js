@@ -1,8 +1,10 @@
 define(
     // dependencies
-	[ "async!https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true!callback" ],
+	[ "async!https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=true!callback" ],
     
 	function() {
+        "use strict";
+        
         // private object & methods
         var gOpt = {
             // map object
@@ -13,17 +15,22 @@ define(
             // default map zoom level
             zoom: 17,
             // markers
-            markers: []
+            markers: [],
+            searchMarkers: [],
+            // search box
+            searchBox: undefined
     	};
         
         /**
         * function to initialise the google map and the user
         */
-        var initialise = function(mapCanvas, coordinate) {
-            var newLatLng = new google.maps.LatLng(coordinate.lat, coordinate.lng);
+        var initialise = function(mapCanvas, coordinates) {
+            
+            var newLatLng = new google.maps.LatLng(coordinates.lat, coordinates.lng);
+            
             var myOptions = {
                 center: newLatLng,
-                zoom: 17,
+                zoom: gOpt.zoom,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             // set map
@@ -32,8 +39,56 @@ define(
             gOpt.directionsService = new google.maps.DirectionsService();
             gOpt.directionsDisplay = new google.maps.DirectionsRenderer({draggable: false});
             gOpt.directionsDisplay.setMap(gOpt.map);
+            // search bar - Create the search box and link it to the UI element.
+            var input = /** @type {HTMLInputElement} */(document.getElementById('pac-input'));
+            //gOpt.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            gOpt.searchBox = new google.maps.places.SearchBox( /** @type {HTMLInputElement} */(input));
             // add event listeners
        		addEventListener(gOpt.map, 'zoom_changed', zoomChanged);
+            google.maps.event.addListener(gOpt.searchBox, 'places_changed', listenForSearch);
+            google.maps.event.addListener(gOpt.map, 'bounds_changed', function() {
+                var bounds = gOpt.map.getBounds();
+                gOpt.searchBox.setBounds(bounds);
+			});
+        };
+		
+        // Listen for the event fired when the user selects an item from the pick list. Retrieve the matching places for that item.
+        var listenForSearch = function() {
+            var places = gOpt.searchBox.getPlaces();
+			
+            if (places.length === 0) {
+              return;
+            }
+			
+            for (var i = 0, marker; marker = gOpt.searchMarkers[i]; i++) {
+                marker.setMap(null);
+            }
+            
+            // For each place, get the icon, place name, and location.
+            var bounds = new google.maps.LatLngBounds();
+            for (var j = 0, place; place = places[j]; j++) {
+                var image = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+                
+                // Create a marker for each place.
+                var newMarker = new google.maps.Marker({
+                    map: gOpt.map,
+                    icon: image,
+                    title: place.name,
+                    position: place.geometry.location
+                });
+                
+                gOpt.searchMarkers.push(newMarker);
+                
+              	bounds.extend(place.geometry.location);
+            }
+			
+            gOpt.map.fitBounds(bounds);
         };
         
         // create a marker and add it to the map
@@ -59,9 +114,12 @@ define(
             gOpt.zoom = gOpt.map.getZoom();
         };
         
-        // return the current zoom level
         var getZoom = function() {
-            return gOpt.map.getZoom();
+            if (gOpt.map) {
+            	return gOpt.map.getZoom();
+            } else {
+                return gOpt.zoom;
+            }
         };
         
         // create a new infowindow and return the object
@@ -89,8 +147,9 @@ define(
         };
         
         // setCenter wrapper
-        var setCenter = function(LatLng) {
-            gOpt.map.setCenter(LatLng);
+        var setCenter = function(coordinates) {
+            var latLng = new google.maps.LatLng(coordinates.lat, coordinates.lng);
+            gOpt.map.setCenter(latLng);
         };
         
         // directionsService route wrapper
@@ -101,14 +160,19 @@ define(
                 travelMode: google.maps.TravelMode[travelMode]
             };
 
-            gOpt.directionsService.route(request, function(response, status) {
+            gOpt.directionsService.route(request, function(result, status) {
                 if(status == google.maps.DirectionsStatus.OK) {
-                    gOpt.directionsDisplay.setDirections(response);
-                	callback(response);
+                    gOpt.directionsDisplay.setDirections(result);
+                	callback(result);
                 } else {
                     callback(null);
                 }
             });
+        };
+        
+        // clear the current route on the map
+        var clearRoute = function() {
+            gOpt.directionsDisplay.setDirections({routes: []});
         };
         
         // add event listener to google maps and return listener variable
@@ -124,6 +188,28 @@ define(
             return google.maps.event.addListener(o, e, f);
         };
         
+        // isInBounds - returns true if coordinates are within the current viewport
+        var isInBounds = function(coordinates) {
+            var latLng = new google.maps.LatLng(coordinates.lat, coordinates.lng);
+            
+            return gOpt.map.getBounds().contains(latLng);
+        };
+        
+        // create a polyline for the pased in path and its colour
+        var createPolyline = function(path, colour) {
+            var polyline = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: colour,
+                strokeOpacity: 0.5,
+                strokeWeight: 8
+            });
+            
+            polyline.setMap(gOpt.map);
+            
+            return polyline;
+        };
+        
         // define public access to the googlemap objects & functions
         return {
             // make the following public
@@ -135,8 +221,11 @@ define(
             setOptions: setOptions,
             getLatLng: getLatLng,
             getRoute: getRoute,
+            clearRoute: clearRoute,
             setCenter: setCenter,
-            addEventListener: addEventListener
+            addEventListener: addEventListener,
+            isInBounds: isInBounds,
+            createPolyline: createPolyline
     	};
 	}
 );

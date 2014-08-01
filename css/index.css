@@ -15,27 +15,7 @@ html, body{
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Tahoma;
-}
-
-.overlay {
-    background-color: rgba(255,255,255,0.7);
-    padding: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.14902);
-    border-radius: 2px;
-    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
-}
-
-#panel {
-    bottom: 20px;
-    left: 100px;
-    height: auto;
-    width: 30%;
-    position: absolute;
-    z-index: 99;
-    padding-top: 7.5px;
-    padding-left: 7.5px;
-    padding-bottom: 7.5px;
+    font-family: Roboto;
 }
 
 #map-canvas {
@@ -46,20 +26,109 @@ html, body{
     float: left;
 }
 
+.overlay {
+    background-color: rgba(255,255,255,0.5);
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.14902);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
+    position: absolute;
+    z-index: 99;
+}
+
+.overlay:hover {
+    background-color: rgba(255,255,255,1.0);
+}
+
+#menu {
+    bottom: 110px;
+    right: 10px;
+    height: auto;
+    width: 180px;
+}
+
+#panel {
+    bottom: 80px;
+    right: 10px;
+    height: 20px;
+    width: 180px;
+}
+
+#eta  {
+    bottom: 50px;
+    right: 10px;
+    height: 20px;
+    width: 180px;
+}
+
 #time {
     bottom: 20px;
     right: 10px;
     height: 20px;
-    position: absolute;
-    z-index: 99;
-    background-color: rgba(255,255,255,0.5);
+    width: 180px;
 }
 
-#eta {
-    bottom: 50px;
-    right: 10px;
-    height: 20px;
+#mode {
+    width: 100px;
+}
+
+.controls {
+    margin-top: 16px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+}
+
+#pac-input {
+    background-color: #fff;
+    padding: 0 11px 0 13px;
+    width: 300px;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    text-overflow: ellipsis;
     position: absolute;
+    left: 90px;
+    top: 10px;
     z-index: 99;
-    background-color: rgba(255,255,255,0.5);
+}
+
+#pac-input:focus {
+    border-color: #4d90fe;
+    margin-left: -1px;
+    padding-left: 14px;  /* Regular padding-left + 1. */
+    width: 301px;
+}
+
+.pac-container {
+    font-family: Roboto;
+}
+
+#type-selector {
+    color: #fff;
+    background-color: #4d90fe;
+    padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+@media (max-width: 450px), (max-height: 350px) {
+    #pac-input {
+        left: 40px;
+        width: 150px;
+        top: -10px;
+    }
+    
+    #pac-input:focus {
+        width: 151px;
+    }
 }

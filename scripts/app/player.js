@@ -8,14 +8,14 @@
 
 define(
     // dependencies
-    ["map"],
+    ["map", "data"],
     
-    function(map) {
-    
+    function(map, data) {
+    	"use strict";
+        
         var varObj = {
             name: 'You',
-            coordinates: {lat: undefined,
-                         lng: undefined},
+            coordinates: undefined,
             marker: undefined,
             infoWindow: undefined,
             endLatLng: undefined,
@@ -31,11 +31,29 @@ define(
             varObj.name = name;
         };
         
-        /**
+         /**
         * getName
         */
-        var getName = function() {
+        var getName = function(user) {
             return varObj.name;
+        };
+        
+        /**
+        * setLocation
+        */
+        var setLocation = function(coordinates) {
+            varObj.coordinates = coordinates;
+            data.setLocation(coordinates);
+        };
+              
+        /**
+        * getLocation
+        */
+        var getLocation = function(callback) {
+            data.getLocation(function(coordinates, err) {
+                varObj.coordinates = coordinates;
+                callback(coordinates, err);
+            });
         };
         
         /**
@@ -67,21 +85,24 @@ define(
         };
         
         /**
-        * getInfoWindow
+        * setInfoWindowContent
         */
-        var getInfoWindow = function() {
-            return varObj.infoWindow;
+        var setInfoWindowContent = function(content) {
+            if (varObj.infoWindow.getContent() !== content) {
+                // only set the content if the content has changed, save screen refresh
+            	varObj.infoWindow.setContent(content);
+            }
         };
         
         /**
-        * setCoordinate
+        * setCoordinates
         */
         var setCoordinates = function(coordinates) {
             varObj.coordinates = coordinates;
         };
         
         /**
-        * getCoordinate
+        * getCoordinates
         */
         var getCoordinates = function() {
             return varObj.coordinates;
@@ -106,6 +127,7 @@ define(
         */
         var setStartTime = function(startTime) {
             varObj.startTime = startTime;
+            data.setStartTime(startTime);
         };
         
         /**
@@ -113,6 +135,16 @@ define(
         */
         var getStartTime = function() {
             return varObj.startTime;
+        };
+        
+        /**
+        * getSavedStartTime
+        */
+        var getSavedStartTime = function(callback) {
+             data.getStartTime(function(startTime, err) {
+                varObj.startTime = startTime;
+                callback(startTime, err);
+            });
         };
         
         /**
@@ -129,20 +161,6 @@ define(
             return varObj.endLatLng;
         };
         
-        /**
-        * setLocation
-        */
-        var setLocation = function(locations, city) {
-            // find the city in the locations object and set the coordinates
-            for (var i=0; i<locations.length; i++) {
-                if (locations[i].city===city) {
-                    varObj.coordinates.lat = locations[i].lat;
-                    varObj.coordinates.lng = locations[i].lng;
-                    break;
-                }
-            }
-		};
-        
 		/**
         * clicked
         */
@@ -154,10 +172,12 @@ define(
         return {
             setName: setName,
             getName: getName,
+            setLocation: setLocation,
+            getLocation: getLocation,
             setMarker: setMarker,
             getMarker: getMarker,
             setInfoWindow: setInfoWindow,
-            getInfoWindow: getInfoWindow,
+            setInfoWindowContent: setInfoWindowContent,
             getIcon: getIcon,
             setCoordinates: setCoordinates,
             getCoordinates: getCoordinates,
@@ -165,9 +185,9 @@ define(
             getInTransitMode: getInTransitMode,
             setStartTime: setStartTime,
             getStartTime: getStartTime,
+            getSavedStartTime: getSavedStartTime,
             setEndLatLng: setEndLatLng,
             getEndLatLng: getEndLatLng,
-            setLocation: setLocation,
             clicked:clicked
         };
 });
