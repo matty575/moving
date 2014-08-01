@@ -6,7 +6,10 @@
   "dependencies": {
     "gulp": "^3.8.6"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-jshint": "^1.8.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
