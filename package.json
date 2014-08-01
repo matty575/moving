@@ -1,0 +1,31 @@
+{
+  "name": "Moving",
+  "version": "0.0.1",
+  "description": "Google Directions Service in Real Time",
+  "main": "scripts/app/app.js",
+  "dependencies": {
+    "gulp": "^3.8.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matty575/Moving.git"
+  },
+  "keywords": [
+    "Google",
+    "Maps",
+    "Direction",
+    "Service",
+    "Realtime",
+    "Movement"
+  ],
+  "author": "Matty Horne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matty575/Moving/issues"
+  },
+  "homepage": "https://github.com/matty575/Moving"
+}
